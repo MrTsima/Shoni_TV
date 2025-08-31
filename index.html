@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shoni TV - შონი ტვ | Entertainment Television</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-menu a:hover {
+            color: #4ecdc4;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .hero-content {
+            z-index: 2;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.4);
+        }
+
+        /* Live Player Section */
+        .live-section {
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .live-player {
+            background: #000;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            margin: 2rem auto;
+            max-width: 800px;
+            position: relative;
+        }
+
+        .video-placeholder {
+            width: 100%;
+            height: 450px;
+            background: linear-gradient(45deg, #2c3e50, #34495e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            position: relative;
+        }
+
+        .play-button {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 1rem;
+        }
+
+        .play-button:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+
+        .play-icon {
+            width: 0;
+            height: 0;
+            border-left: 25px solid #333;
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+            margin-left: 5px;
+        }
+
+        .live-indicator {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #ff4757;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        /* Programs Section */
+        .programs-section {
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .programs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .program-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .program-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+        }
+
+        .program-image {
+            height: 200px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+        }
+
+        .program-content {
+            padding: 1.5rem;
+        }
+
+        .program-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .program-time {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .program-description {
+            color: #777;
+            line-height: 1.5;
+        }
+
+        /* About Section */
+        .about-section {
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            text-align: center;
+        }
+
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .about-text {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stat-item {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        /* Footer */
+        .footer {
+            background: #1a1a2e;
+            color: white;
+            padding: 3rem 2rem 1rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #4ecdc4;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .video-placeholder {
+                height: 250px;
+            }
+
+            .programs-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
+            transform-origin: left;
+            transform: scaleX(0);
+            z-index: 9999;
+        }
+    </style>
+</head>
+<body>
+    <div class="scroll-indicator" id="scrollIndicator"></div>
+    
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">Shoni TV</div>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a onclick="scrollToSection('hero')">მთავარი</a></li>
+                    <li><a onclick="scrollToSection('live')">პირდაპირი</a></li>
+                    <li><a onclick="scrollToSection('programs')">პროგრამები</a></li>
+                    <li><a onclick="scrollToSection('about')">შესახებ</a></li>
+                    <li><a onclick="scrollToSection('contact')">კონტაქტი</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="hero" class="hero">
+        <div class="hero-content">
+            <h1>Shoni TV<br>შონი ტვ</h1>
+            <p>შენი ქართული ტელევიზია!</p>
+            <a href="#live" class="cta-button" onclick="scrollToSection('live')">უყურე ლაივს</a>
+        </div>
+    </section>
+
+<section class="logo-section" style="padding: 3rem 2rem; background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); text-align: center;">
+        <div class="container">
+            <h2 style="color: white; font-size: 2.5rem; margin-bottom: 2rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">Shoni TV-ის ლოგო</h2>
+            <div style="background: white; border-radius: 20px; padding: 3rem; max-width: 600px; margin: 0 auto; box-shadow: 0 20px 40px rgba(0,0,0,0.3);">
+                <!-- Replace the src with your logo image URL -->
+                <img src="logo.png" alt="Shoni TV Logo" style="max-width: 100%; height: auto; max-height: 300px; margin-bottom: 1rem; border-radius: 10px;" onerror="this.style.display='none'; document.getElementById('fallbackLogo').style.display='block';">
+                
+                <!-- Fallback text logo if image fails to load -->
+                <div id="fallbackLogo" style="display: none;">
+                    <div style="font-size: 4rem; font-weight: bold; background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #667eea); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 1rem; text-shadow: none;">
+                        Shoni TV
+                    </div>
+                    <div style="font-size: 3rem; font-weight: bold; color: #2c3e50; margin-bottom: 1rem;">
+                        შონი ტვ
+                    </div>
+                </div>
+                
+                <div style="color: #666; font-size: 1.2rem; font-style: italic; margin-top: 1rem;">
+                    გასართობი ტელევიზია
+                </div>
+                <div style="margin-top: 2rem; padding: 1rem; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 10px; color: white; font-weight: bold;">
+                    📺 მაუწყებლობის სრულყოფილება დაარსების დღიდან
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="live" class="live-section">
+        <div class="container">
+            <h2 class="section-title">პირდაპირი ეთერი</h2>
+            <div class="live-player">
+                <div class="live-indicator">🔴 LIVE</div>
+                <div class="video-placeholder">
+                    <div class="play-button" onclick="startLiveStream()">
+                        <div class="play-icon"></div>
+                    </div>
+                </div>
+            </div>
+            <p style="color: white; margin-top: 1rem; font-size: 1.1rem;">
+                📺 პირდაპირი 24/7 | მაღალი ხარისხით
+            </p>
+        </div>
+    </section>
+
+    <section id="programs" class="programs-section">
+        <div class="container">
+            <h2 class="section-title" style="color: white;">ჩვენი პროგრამები</h2>
+            <div class="programs-grid">
+                <div class="program-card">
+                    <div class="program-image">🎬</div>
+                    <div class="program-content">
+                        <div class="program-title">ფილმები</div>
+                        <div class="program-time">არ არის ხელმისაწვდომი</div>
+                        <div class="program-description">არ არის ხელმისაწვდომი</div>
+                    </div>
+                </div>
+                <div class="program-card">
+                    <div class="program-image">🎵</div>
+                    <div class="program-content">
+                        <div class="program-title">მუსიკა</div>
+                        <div class="program-time">არ არის ხელმისაწვდომი</div>
+                        <div class="program-description">არ არის ხელმისაწვდომი</div>
+                    </div>
+                </div>
+                <div class="program-card">
+                    <div class="program-image">📺</div>
+                    <div class="program-content">
+                        <div class="program-title">გადაცემები</div>
+                        <div class="program-time">არ არის ხელმისაწვდომი</div>
+                        <div class="program-description">არ არის ხელმისაწვდომი</div>
+                    </div>
+                </div>
+                <div class="program-card">
+                    <div class="program-image">🎭</div>
+                    <div class="program-content">
+                        <div class="program-title">იუმორი</div>
+                        <div class="program-time">არ არის ხელმისაწვდომი</div>
+                        <div class="program-description">არ არის ხელმისაწვდომი</div>
+                    </div>
+                </div>
+                <div class="program-card">
+                    <div class="program-image">📰</div>
+                    <div class="program-content">
+                        <div class="program-title">ახალი ამბები</div>
+                        <div class="program-time">არ არის ხელმისაწვდომი</div>
+                        <div class="program-description">არ არის ხელმისაწვდომი</div>
+                    </div>
+                </div>
+                <div class="program-card">
+                    <div class="program-image">🏆</div>
+                    <div class="program-content">
+                        <div class="program-title">კასტინგები</div>
+                        <div class="program-time">არ არის ხელმისაწვდომი</div>
+                        <div class="program-description">არ არის ხელმისაწვდომი</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about-section">
+        <div class="container">
+            <h2 class="section-title" style="color: #333;">Shoni TV-ის შესახებ</h2>
+            <div class="about-content">
+                <p class="about-text">
+                    შონი ტვ საქართველოს წამყვანი გასართობი სატელევიზიო ქსელია, რომელიც ორიენტირებულია საუკეთესო გასართობი პროგრამების შემოთავაზებაზე. ჩვენი გაშვების დღიდან ჩვენ ვცდილობთ, შემოგთავაზოთ მაღალი ხარისხის კონტენტი, რომელიც გაართობს, აცნობს და შთააგონებს ჩვენს მაყურებელს მთელ საქართველოში და მის ფარგლებს გარეთ.
+                </p>
+                <p class="about-text">
+                    ჩვენი არხი გთავაზობთ მრავალფეროვან ქართულ კონტენტს: ფილმებს, კონცერტებს, მუსიკალურ და სამოდელო კასტინგებს, კლიპებს და უამრავ შემეცნებით თუ გასართობ გადაცემას. ჩვენი მიზანია, ოჯახის ყველა წევრს შევთავაზოთ საუკეთესო ქართული სატელევიზიო გამოცდილება და ვიყოთ მათი გართობის სანდო წყარო.
+                </p>
+                <p class="about-text" style="font-weight: 600; color: #667eea;">
+                    დირექტორი: კობა ციმაკურიძე
+                </p>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Broadcasting</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">50+</div>
+                        <div class="stat-label">Programs</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">1M+</div>
+                        <div class="stat-label">Viewers</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">🇬🇪</div>
+                        <div class="stat-label">Georgia Coverage</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact" class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="javascript:void(0)" onclick="showContact('phone')">📞 კონტაქტი</a>
+                <a href="javascript:void(0)" onclick="showContact('email')">✉️ Email</a>
+                <a href="javascript:void(0)" onclick="showContact('address')">📍 მისამართი</a>
+                <a href="https://www.facebook.com/SHONITV22" target="_blank" rel="noopener noreferrer">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle; margin-right: 5px;">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                    Facebook
+                </a>
+                <a href="https://www.youtube.com/@shonitv4980" target="_blank" rel="noopener noreferrer">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle; margin-right: 5px;">
+                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                    </svg>
+                    YouTube
+                </a>
+            </div>
+            <div id="contactInfo" style="margin: 1rem 0; min-height: 50px; display: flex; align-items: center; justify-content: center; color: #ccc;">
+                დეტალების სანახავად დააჭირეთ ზემოთ მოცემულ ნებისმიერ საკონტაქტო ვარიანტზე
+            </div>
+            <p style="color: #666; margin-top: 2rem;">
+                © 2025 Shoni TV - შონი ტვ. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling function
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }
+
+        // Scroll progress indicator
+        window.addEventListener('scroll', () => {
+            const scrolled = (window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            document.getElementById('scrollIndicator').style.transform = `scaleX(${scrolled / 100})`;
+        });
+
+        // Live stream functionality
+        function startLiveStream() {
+            const placeholder = document.querySelector('.video-placeholder');
+            placeholder.innerHTML = `
+                <div style="color: white; text-align: center;">
+                    <div style="font-size: 2rem; margin-bottom: 1rem;">📡</div>
+                    <div style="font-size: 1.2rem; margin-bottom: 0.5rem;">Connecting to Live Stream...</div>
+                    <div style="font-size: 0.9rem; opacity: 0.8;">Please wait while we establish connection</div>
+                    <div style="margin-top: 1rem;">
+                        <button onclick="location.reload()" style="background: #ff6b6b; color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer;">
+                            🔄 Refresh Player
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Simulate loading
+            setTimeout(() => {
+                placeholder.innerHTML = `
+                    <div style="color: white; text-align: center;">
+                        <div style="font-size: 2rem; margin-bottom: 1rem;">📺</div>
+                        <div style="font-size: 1.2rem; margin-bottom: 0.5rem;">Live Stream Ready</div>
+                        <div style="font-size: 0.9rem; opacity: 0.8;">Demo Mode - Actual stream integration needed</div>
+                        <div style="margin-top: 1rem;">
+                            <button onclick="location.reload()" style="background: #4ecdc4; color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer;">
+                                ↩️ Back to Player
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }, 2000);
+        }
+
+        // Contact information display
+        function showContact(type) {
+            const contactInfo = document.getElementById('contactInfo');
+            const contacts = {
+                phone: '📞 Phone: 598 41 35 19 / 558 21 30 01',
+                email: '✉️ Email: shoni_tv@yahoo.com',
+                address: '📍 Address: გლდანი, ხიზანიშვილის 41, თბილისი, საქართველო',
+                social: '📱 Facebook: facebook.com/SHONITV22 | YouTube: @shonitv4980'
+            };
+            
+            contactInfo.innerHTML = contacts[type] || 'Contact information not available';
+            contactInfo.style.color = '#4ecdc4';
+            
+            setTimeout(() => {
+                contactInfo.style.color = '#ccc';
+            }, 3000);
+        }
+
+        // Add some interactive animations
+        document.addEventListener('DOMContentLoaded', () => {
+            // Animate program cards on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe program cards
+            document.querySelectorAll('.program-card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'all 0.6s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'977ca653204b0f22',t:'MTc1NjY0NDU4NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
